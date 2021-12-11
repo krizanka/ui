@@ -2,7 +2,7 @@
   "name": "crossword",
   "version": "0.6.1",
   "private": true,
-  "homepage": "http://bozzzzo.github.io/krizanka",
+  "homepage": "http://krizanka.github.io/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
@@ -17,7 +17,7 @@
   "scripts": {
     "start": "react-scripts start",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d build -r git@github.com:krizanka/krizanka.github.io.git",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
