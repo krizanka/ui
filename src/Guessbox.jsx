@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import PatternSelect from './PatternSelect';
-import Actions from "./Actions";
-import {iconList, iconShuffle} from "./Svg";
+import {iconList, iconShuffle, iconClose} from "./Svg";
 
 function shuffle(array) {
     array = array.slice();
@@ -19,7 +18,7 @@ function lettersToState(letters) {
 const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, score}) => {
     const [letters, setLetters] = useState(lettersToState(propsLetters));
     const [value, setValue] = useState("");
-	const [renderList, setRenderList] = useState(false);
+		const [showScoreList, setShowScoreList] = useState(false);
 
     React.useEffect(()=>setLetters(lettersToState(propsLetters)), [propsLetters])
 
@@ -35,7 +34,7 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, scor
     }
 	
 	function handleRenderList() {
-		setRenderList(!renderList);
+		setShowScoreList(!showScoreList);
 	}
 
     function handleClear() {
@@ -49,14 +48,25 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, scor
 		
 		function renderScore() {
 			return (
-				<dialog>
-					<div className="score">
-						<span className="guess"> g {score.guess}/{score.words} </span>
-						<span className="known"> k {score.known}/{score.unused} </span>
-						<span className="miss"> m {score.miss} </span>
-						<span className="repeat"> r {score.repeat} </span>
+				<div className="c-dialog">
+					<div className="c-dialog__container">
+						<button
+							onClick={ (e) => handleRenderList() }
+							className="c-dialog__container"
+						>
+							{ iconClose() }
+						</button>
+						
+						<div className="score">
+							<h1>Tocke</h1>
+							<span className="guess">Uganjene / Vse {score.guess}/{score.words} </span>
+							<span className="known">Znane / neuporabljene {score.known}/{score.unused} </span>
+							<span className="miss">Napacne {score.miss} </span>
+							<span className="repeat">Ponovljene {score.repeat} </span>
+						</div>
+						{ renderHistory() }
 					</div>
-				</dialog>
+				</div>
 			)
 		}
 
@@ -72,19 +82,24 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, scor
 
 							}
 					</div>
-					<div class="c-selection">
+					<div className="c-selection">
 						<React.Fragment key={JSON.stringify(letters)}>
-							<button
-								className="c-selection__btn c-selection__btn--left"
-								onClick={ (e) => handleRenderList() }>
-								{ iconList() }
-							</button>
-							<button
-								className="c-selection__btn c-selection__btn--right"
-								onClick={(e) => handleShuffle()}
-								title="Shuffle">
-								{ iconShuffle() }
-							</button>
+							<div className="c-selection__side c-selection__side--left">
+								<button
+									className="c-btn c-btn--round"
+									onClick={ (e) => handleRenderList() }>
+									{ iconList() }
+								</button>
+							</div>
+							<div className="c-selection__side c-selection__side--right">
+								<button
+									className="c-btn c-btn--round"
+									onClick={(e) => handleShuffle()}
+									title="Shuffle">
+									{ iconShuffle() }
+								</button>
+							</div>
+							
 							<PatternSelect
 								letters={letters}
 								onClear={handleClear}
@@ -93,7 +108,8 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, scor
 							/>
 						</React.Fragment>
 					</div>
-
+	
+					{ showScoreList && renderScore() }
         
         </>
     );

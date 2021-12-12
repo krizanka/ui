@@ -1,0 +1,15 @@
+.c-pattern {
+  &__letter {
+    animation: fadeIn 200ms ease-in;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+
+  }
+  to {
+    opacity: 1;
+  }
+}

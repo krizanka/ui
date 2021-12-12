@@ -33,7 +33,6 @@ class Game extends React.Component {
 
 
     render() {
-			console.log(this.props)
         return (
             <div
 							style={{display: "flex", flexDirection:"column", justifyContent:"space-between", height: "100vh"}}

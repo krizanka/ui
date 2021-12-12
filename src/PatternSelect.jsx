@@ -219,15 +219,20 @@ const PatternSelect = ({letters, onClear, setValue, onSubmit}) => {
     return (
         
     <div style={{display: "flex", justifyContent:"center", padding: 20}}>
-        <svg style={{width: 225, height: 225, background: "var(--c-secondary)", borderRadius: 112.5}} className="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <g className="lock-actives"></g>
-                <g className="lock-lines"></g>
+        <svg style={{width: 225, height: 225, background: "var(--c-secondary)", borderRadius: 112.5}}
+						 className="patternlock"
+						 id="lock"
+						 viewBox="0 0 100 100"
+						 xmlns="http://www.w3.org/2000/svg"
+				>
+                <g className="lock-actives"/>
+                <g className="lock-lines"/>
                 <g className="lock-dots">
                     {letters && letters.length && letters.map((l,i) => {
                         return(
                             <React.Fragment key={i}>
                                 <circle index={i} data={l.l} cx={getCoordinates(i).x} cy={getCoordinates(i).y} r={6.5} opacity="0" />
-                                <text className="svgtxt" value={l.l} id={`letter_${i}`} textAnchor="middle" x={getCoordinates(i).x} y={getCoordinates(i).y} fill="var(--c-tertiary)" fontSize="0.8em"  dy=".3em">{l.l.toUpperCase()}</text>
+                                <text className="c-pattern__letter svgtxt" value={l.l} id={`letter_${i}`} textAnchor="middle" x={getCoordinates(i).x} y={getCoordinates(i).y} fill="var(--c-tertiary)" fontSize="0.8em"  dy=".3em">{l.l.toUpperCase()}</text>
                             </React.Fragment>
                         )}
                     )}

@@ -1,10 +1,9 @@
 .c-selection {
   position: relative;
 
-  &__btn {
+  &__side {
     position: absolute;
     top: 0;
-    color: var(--c-gray);
 
     &--left {
       left: 5vmin;

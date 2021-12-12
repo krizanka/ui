@@ -4,4 +4,12 @@
   justify-content: center;
   color: inherit;
   font-family: inherit;
+  color: var(--c-gray);
+
+  &--round {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--c-secondary);
+  }
 }
