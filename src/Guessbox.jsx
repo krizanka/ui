@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import PatternSelect from './PatternSelect';
 import Actions from "./Actions";
+import {iconList, iconShuffle} from "./Svg";
 
 function shuffle(array) {
     array = array.slice();
@@ -15,9 +16,10 @@ function lettersToState(letters) {
     return letters.map((x) => ({l: x, used: false}));
 }
 
-const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed}) => {
+const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, score}) => {
     const [letters, setLetters] = useState(lettersToState(propsLetters));
     const [value, setValue] = useState("");
+	const [renderList, setRenderList] = useState(false);
 
     React.useEffect(()=>setLetters(lettersToState(propsLetters)), [propsLetters])
 
@@ -31,6 +33,10 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed}) => 
     function handleShuffle() {
         setLetters(shuffle(letters));
     }
+	
+	function handleRenderList() {
+		setRenderList(!renderList);
+	}
 
     function handleClear() {
         clear();
@@ -40,34 +46,55 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed}) => 
         setLetters(letters.map(l => ({...l, used:false})));
         setValue("");
     }
+		
+		function renderScore() {
+			return (
+				<dialog>
+					<div className="score">
+						<span className="guess"> g {score.guess}/{score.words} </span>
+						<span className="known"> k {score.known}/{score.unused} </span>
+						<span className="miss"> m {score.miss} </span>
+						<span className="repeat"> r {score.repeat} </span>
+					</div>
+				</dialog>
+			)
+		}
 
     return (
         <>
-            <div>
-                <div className="c-word">
-                    { value &&
-                        <div className="c-word__container">
-                            {Array.from(value).map((l,i) => (
-                                <span key={i}>{l}</span>
-                            ))}
-                        </div>
+					<div className="c-word">
+							{ value &&
+									<div className="c-word__container">
+											{Array.from(value).map((l,i) => (
+													<span key={i}>{l}</span>
+											))}
+									</div>
 
-                    }
-                </div>
-                <React.Fragment key={JSON.stringify(letters)}>
-                <PatternSelect
-                    letters={letters}
-                    onClear={handleClear}
-                    setValue={setValue}
-                    onSubmit={handleSubmit}
-                />
-                </React.Fragment>
+							}
+					</div>
+					<div class="c-selection">
+						<React.Fragment key={JSON.stringify(letters)}>
+							<button
+								className="c-selection__btn c-selection__btn--left"
+								onClick={ (e) => handleRenderList() }>
+								{ iconList() }
+							</button>
+							<button
+								className="c-selection__btn c-selection__btn--right"
+								onClick={(e) => handleShuffle()}
+								title="Shuffle">
+								{ iconShuffle() }
+							</button>
+							<PatternSelect
+								letters={letters}
+								onClear={handleClear}
+								setValue={setValue}
+								onSubmit={handleSubmit}
+							/>
+						</React.Fragment>
+					</div>
 
-              <span class="elapsed">{Math.floor(elapsed/60)}:{elapsed%60}</span>
-            </div>
-          <Actions renderHistory={renderHistory}
-                   onShuffle={handleShuffle}
-                   onReload={onReload} />
+        
         </>
     );
 };

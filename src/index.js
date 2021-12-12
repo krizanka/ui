@@ -11,9 +11,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 class App extends React.Component {
     render() {
         return (
-            <div>
-                <GameLogic hintLimit={5} />
-            </div>
+					<GameLogic hintLimit={5} />
         );
     }
 }

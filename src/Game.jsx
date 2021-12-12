@@ -2,6 +2,7 @@ import React from "react";
 import { version } from '../package.json';
 import Guessbox from './Guessbox';
 import Pad from "./Pad";
+import Header from "./Header";
 
 class Game extends React.Component {
     renderHistory() {
@@ -32,8 +33,16 @@ class Game extends React.Component {
 
 
     render() {
+			console.log(this.props)
         return (
-            <div style={{display: "flex", flexDirection:"column", justifyContent:"space-between", height: "100vh"}} className="game">
+            <div
+							style={{display: "flex", flexDirection:"column", justifyContent:"space-between", height: "100vh"}}
+							className={`${this.props.theme} game`}>
+							<Header
+								elapsed={this.props.elapsed}
+								score={this.props.score}
+								onReload={this.props.onReload}
+							/>
               <Pad
                 pad={this.props.pad}
                 cols={this.props.cols}
@@ -47,7 +56,9 @@ class Game extends React.Component {
                 onGuess={this.props.onGuess}
                 onReload={this.props.onReload}
                 renderHistory={() => this.renderHistory()}
-                elapsed={this.props.elapsed} />
+                elapsed={this.props.elapsed}
+								score={this.props.score}
+							/>
             </div>
         );
     }

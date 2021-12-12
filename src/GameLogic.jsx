@@ -86,6 +86,7 @@ function stateFromCrossword(crossword) {
         crossword: crossword,
         letters: Array.from(crossword.letters).slice().sort(),
         gameplay: {previous: 0, start: Date.now(), current: 0},
+				theme: '',
         // see above for state schema changes
     };
 }
@@ -237,7 +238,6 @@ class GameLogic extends React.Component {
         });
     }
 
-
     render() {
 
         const state = this.state;
@@ -255,6 +255,7 @@ class GameLogic extends React.Component {
                 onHint={(x,y) => this.handleHint(x,y)}
                 onGuess={(w) => this.handleGuess(w)}
                 onReload={() => this.handleReload()}
+								theme={ "theme-dark" }
 						    />
         );
     }
