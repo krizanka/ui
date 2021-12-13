@@ -32,6 +32,9 @@ jobs:
     - name: Install NPM packages
       run: npm ci
 
+    - name: spy
+      run: env
+
     - name: Fixup homepage
       if: github.ref != 'refs/heads/main'
       run: python3 .github/scripts/fixup.homepage.py
