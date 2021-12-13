@@ -30,7 +30,7 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install NPM packages
-      run: npm ci
+      run: npm install
 
     - name: Fixup homepage
       id: fixup
