@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import PatternSelect from './PatternSelect';
 import Actions from "./Actions";
 
@@ -19,7 +19,7 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed}) => 
     const [letters, setLetters] = useState(lettersToState(propsLetters));
     const [value, setValue] = useState("");
 
-    React.useEffect(()=>setLetters(lettersToState(propsLetters)), [propsLetters])
+    useEffect(()=>setLetters(lettersToState(propsLetters)), [propsLetters])
 
     function handleSubmit(val) {
         if (val.length < 3)
@@ -63,7 +63,7 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed}) => 
                 />
                 </React.Fragment>
 
-              <span class="elapsed">{Math.floor(elapsed/60)}:{elapsed%60}</span>
+              <span className="elapsed">{Math.floor(elapsed/60)}:{elapsed%60}</span>
             </div>
           <Actions renderHistory={renderHistory}
                    onShuffle={handleShuffle}

@@ -20,7 +20,7 @@ const PatternSelect = ({letters, onClear, setValue, onSubmit}) => {
         
         let svg = $(element)
         let root = svg[0]
-        let dots = svg.find('.lock-dots text')
+        let dots = svg.find('.lock-dots circle')
         let lines = svg.find('.lock-lines')
         let actives = svg.find('.lock-actives')
         const pt = root.createSVGPoint();
@@ -41,7 +41,7 @@ const PatternSelect = ({letters, onClear, setValue, onSubmit}) => {
         })
 
         function getPattern() {
-            const pattern = code.map((i) => i.attributes.value.value).join('')
+            const pattern = code.map((i) => i.attributes.data.value).join('')
             return pattern
         }
 
@@ -147,20 +147,20 @@ const PatternSelect = ({letters, onClear, setValue, onSubmit}) => {
                 svg.off('touchmove mousemove', currenthandler)
             }
             if (target === undefined) return
-            let x = target.getAttribute('cx') || target.getAttribute("x")
-            let y = target.getAttribute('cy') || target.getAttribute("y")
+            let x = target.getAttribute('x') || target.getAttribute("cx")
+            let y = target.getAttribute('y') || target.getAttribute("cy")
             line.setAttribute('x2', x)
             line.setAttribute('y2', y)
         }
 
         function beginTrack(target) { 
             code.push(target)
-            setValue(code?.map((i) => i.attributes.value.value).join(''))
-            let x = target.getAttribute('cx') || target.getAttribute("x")
-            let y = target.getAttribute('cy') || target.getAttribute("y")
+            setValue(code?.map((i) => i.attributes.data.value).join(''))
+            let x = target.getAttribute('x') ||  target.getAttribute("cx")
+            let y = target.getAttribute('y') || target.getAttribute("cy") 
             const line = createNewLine(x, y)
             const marker = createNewMarker(x, y)
-            document.getElementById(target.getAttribute("id")).setAttribute("fill", "var(--c-primary)")
+            document.getElementById(`letter_${target.getAttribute(`id`)}`).setAttribute("fill", "var(--c-primary)")
             actives.append(marker)
             currenthandler = updateLine(line)
             svg.on('touchmove mousemove', currenthandler)
@@ -211,23 +211,31 @@ const PatternSelect = ({letters, onClear, setValue, onSubmit}) => {
 
     const getCoordinates = (index) => {
         const alpha = 2 * Math.PI * index / letters.length 
-        const x =  50 + 39 * Math.cos(alpha)
-        const y = 50 + 39 * Math.sin(alpha)
+        const x =  62.5 + 46 * Math.cos(alpha)
+        const y = 62.5 + 46 * Math.sin(alpha)
+        return {x: x, y: y}
+    }
+
+    const getCircleCoordinates = (index) => {
+        const alpha = 2 * Math.PI * index / letters.length 
+        const x =  62.5 + 63 * Math.cos(alpha)
+        const y = 62.5 + 63 * Math.sin(alpha)
         return {x: x, y: y}
     }
 
     return (
         
     <div style={{display: "flex", justifyContent:"center", padding: 20}}>
-        <svg style={{width: 225, height: 225, background: "var(--c-secondary)", borderRadius: 112.5}} className="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <svg style={{width: 250, height: 250, background: "var(--c-secondary)", borderRadius: 125}} className="patternlock" id="lock" viewBox="0 0 125 125" xmlns="http://www.w3.org/2000/svg">
+            {/* <g><circle  cx={62.5} cy={62.5} r={50} opacity="1" /></g> */}
                 <g className="lock-actives"></g>
                 <g className="lock-lines"></g>
                 <g className="lock-dots">
                     {letters && letters.length && letters.map((l,i) => {
                         return(
                             <React.Fragment key={i}>
-                                <circle index={i} data={l.l} cx={getCoordinates(i).x} cy={getCoordinates(i).y} r={6.5} opacity="0" />
                                 <text className="svgtxt" value={l.l} id={`letter_${i}`} textAnchor="middle" x={getCoordinates(i).x} y={getCoordinates(i).y} fill="var(--c-tertiary)" fontSize="0.8em"  dy=".3em">{l.l.toUpperCase()}</text>
+                                <circle index={i} data={l.l}  id={i} cx={getCircleCoordinates(i).x} cy={getCircleCoordinates(i).y} x={getCoordinates(i).x} y={getCoordinates(i).y} r={12} fill="#0000FF" opacity="0" />
                             </React.Fragment>
                         )}
                     )}

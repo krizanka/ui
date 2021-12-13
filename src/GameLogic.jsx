@@ -64,7 +64,7 @@ function validate_schema_migrations() {
         alert("Missing schema_migrations["+i+"], add it.");
         return false;
     }
-    if (Object.keys(schema_migrations).length != state_schema_version) {
+    if (Object.keys(schema_migrations).length !== state_schema_version) {
         alert("Weird schema_migrations, fix it.");
         return false;
     }
@@ -140,7 +140,7 @@ class GameLogic extends React.Component {
     handleTick() {
         const state = this.state;
         const elapsed = Math.floor((Date.now() - state.gameplay.start) / 1000);
-        if (elapsed != state.gameplay.current) {
+        if (elapsed !== state.gameplay.current) {
             this.setState({
                 ...state,
                 gameplay: {
