@@ -34,8 +34,7 @@ jobs:
 
     - name: Fixup homepage
       if: github.ref != 'refs/heads/main'
-      run: .github/scripts/fixup-homepage.sh
-      shell: bash
+      run: python3 .github/scripts/fixup.homepage.py
 
     - name: Build project
       run: npm run build
