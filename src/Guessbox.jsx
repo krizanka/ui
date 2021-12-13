@@ -52,17 +52,20 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, scor
 					<div className="c-dialog__container">
 						<button
 							onClick={ (e) => handleRenderList() }
-							className="c-dialog__container"
+							className="c-dialog__close"
 						>
 							{ iconClose() }
 						</button>
-						
-						<div className="score">
-							<h1>Tocke</h1>
-							<span className="guess">Uganjene / Vse {score.guess}/{score.words} </span>
-							<span className="known">Znane / neuporabljene {score.known}/{score.unused} </span>
-							<span className="miss">Napacne {score.miss} </span>
-							<span className="repeat">Ponovljene {score.repeat} </span>
+						<h1>Točke</h1>
+						<div className="o-grid o-grid__twoCol o-grid__twoCol--2_1">
+							<div>Uganjene / Vse</div>
+							<div className="u-text-right">{score.guess}/{score.words}</div>
+							<div>Znane / Neuporabljene</div>
+							<div className="u-text-right">{score.known}/{score.unused} </div>
+							<div>Napacne besede</div>
+							<div className="u-text-right">{score.miss}</div>
+							<div>Ponovljene besede</div>
+							<div className="u-text-right">{score.repeat} </div>
 						</div>
 						{ renderHistory() }
 					</div>

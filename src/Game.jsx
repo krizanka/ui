@@ -20,11 +20,11 @@ class Game extends React.Component {
         }
         return (
             <div className="c-history">
-              <p className="known">
+              <p className="known">ee 
                 {this.props.history.filter((w)=>w.known && !w.guess).map(renderLi)}
               </p>
               <hr/>
-              <p className="unknown">
+              <p className="unknown">dd
                 {this.props.history.filter((w)=>!w.known && !w.guess).map(renderLi)}
               </p>
               <span className="app-version">version: { version }</span>

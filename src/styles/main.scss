@@ -4,6 +4,8 @@
 
 @import './elements/body';
 
+@import './objects/grid';
+
 @import './components/header';
 @import './components/button';
 @import './components/game';
@@ -16,3 +18,5 @@
 @import './components/chooser';
 @import './components/word-list';
 @import './components/dialog';
+
+@import './trumps/text';

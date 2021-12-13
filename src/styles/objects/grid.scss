@@ -1,0 +1,13 @@
+.o-grid {
+  display: grid;
+
+  &__twoCol {
+    grid-column-gap: 2em;
+    grid-row-gap: 1em;
+    grid-template-columns: 1fr 1fr;
+
+    &--2_1 {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+}
