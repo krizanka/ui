@@ -32,9 +32,6 @@ jobs:
     - name: Install NPM packages
       run: npm ci
 
-    - name: spy
-      run: env
-
     - name: Fixup homepage
       id: fixup
       if: github.ref != 'refs/heads/main'
