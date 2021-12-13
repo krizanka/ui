@@ -12,16 +12,16 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    
+
     - name: Install Node.js
       uses: actions/setup-node@v1
       with:
         node-version: 16.x
-    
+
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
@@ -31,18 +31,23 @@ jobs:
 
     - name: Install NPM packages
       run: npm ci
-    
+
+    - name: Fixup homepage
+      if: github.ref != 'refs/heads/main'
+      run: .github/scripts/fixup-homepage.sh
+      shell: bash
+
     - name: Build project
       run: npm run build
-    
+
 #    - name: Run tests and produce reports
 #      run: npm run test:ci
-#    
+#
 #    - name: Publish test results
 #      uses: IgnusG/jest-report-action@v2.3.3
-#      if: always()  
+#      if: always()
 ##      with:
-#        access-token: ${{ secrets.GITHUB_TOKEN }}   
+#        access-token: ${{ secrets.GITHUB_TOKEN }}
 #
 #    - name: Publish code coverage results
 #      uses: romeovs/lcov-reporter-action@v0.2.19
@@ -55,13 +60,13 @@ jobs:
       with:
         name: production-files
         path: ./build
-  
-  deploy:
+
+  deploy-prod:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
     - name: Download artifact
       uses: actions/download-artifact@v2
@@ -75,6 +80,31 @@ jobs:
         publish_dir: ./build
         personal_token: ${{ secrets.DEPLOY_TOKEN }}
         external_repository: krizanka/krizanka.github.io
+        #   keep_files: true
+        # user_name: <username>
+        # user_email: <username@email.com>
+        #   cname: example.com
+
+  deploy-pr:
+    name: Deploy PR
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: production-files
+        path: ./build
+
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        publish_dir: ./build
+        personal_token: ${{ secrets.DEPLOY_TOKEN }}
+        external_repository: krizanka/krizanka.github.io
+        destination_dir: ${{ github.sha }}
         #   keep_files: true
         # user_name: <username>
         # user_email: <username@email.com>
