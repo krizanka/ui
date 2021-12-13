@@ -36,8 +36,9 @@ jobs:
       run: env
 
     - name: Fixup homepage
+      id: fixup
       if: github.ref != 'refs/heads/main'
-      run: python3 .github/scripts/fixup.homepage.py
+      run: echo "::set-output destination::$(python3 .github/scripts/fixup.homepage.py)
 
     - name: Build project
       run: npm run build
@@ -106,7 +107,7 @@ jobs:
         publish_dir: ./build
         personal_token: ${{ secrets.DEPLOY_TOKEN }}
         external_repository: krizanka/krizanka.github.io
-        destination_dir: ${{ github.sha }}
+        destination_dir: ${{ steps.fixup.outputs.destination }}
         #   keep_files: true
         # user_name: <username>
         # user_email: <username@email.com>
