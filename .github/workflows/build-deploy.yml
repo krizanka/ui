@@ -38,7 +38,7 @@ jobs:
     - name: Fixup homepage
       id: fixup
       if: github.ref != 'refs/heads/main'
-      run: echo "::set-output destination::$(python3 .github/scripts/fixup.homepage.py)
+      run: echo "::set-output destination::$(python3 .github/scripts/fixup.homepage.py)"
 
     - name: Build project
       run: npm run build
