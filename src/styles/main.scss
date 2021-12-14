@@ -4,11 +4,19 @@
 
 @import './elements/body';
 
+@import './objects/grid';
+
+@import './components/header';
+@import './components/button';
 @import './components/game';
 @import './components/word';
 @import './components/guessbox';
 @import './components/table';
+@import './components/selection';
+@import './components/pattern';
 @import './components/actions';
 @import './components/chooser';
 @import './components/word-list';
-@import './components/history';
+@import './components/dialog';
+
+@import './trumps/text';

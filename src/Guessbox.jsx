@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import PatternSelect from './PatternSelect';
-import Actions from "./Actions";
+import {iconList, iconShuffle, iconClose} from "./Svg";
 
 function shuffle(array) {
     array = array.slice();
@@ -15,9 +15,10 @@ function lettersToState(letters) {
     return letters.map((x) => ({l: x, used: false}));
 }
 
-const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed}) => {
+const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, score}) => {
     const [letters, setLetters] = useState(lettersToState(propsLetters));
     const [value, setValue] = useState("");
+		const [showScoreList, setShowScoreList] = useState(false);
 
     React.useEffect(()=>setLetters(lettersToState(propsLetters)), [propsLetters])
 
@@ -31,6 +32,10 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed}) => 
     function handleShuffle() {
         setLetters(shuffle(letters));
     }
+	
+	function handleRenderList() {
+		setShowScoreList(!showScoreList);
+	}
 
     function handleClear() {
         clear();
@@ -40,34 +45,75 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed}) => 
         setLetters(letters.map(l => ({...l, used:false})));
         setValue("");
     }
+		
+		function renderScore() {
+			return (
+				<div className="c-dialog">
+					<div className="c-dialog__container">
+						<button
+							onClick={ (e) => handleRenderList() }
+							className="c-dialog__close"
+						>
+							{ iconClose() }
+						</button>
+						<h1>Točke</h1>
+						<div className="o-grid o-grid__twoCol o-grid__twoCol--2_1">
+							<div>Uganjene / Vse</div>
+							<div className="u-text-right">{score.guess}/{score.words}</div>
+							<div>Znane / Neuporabljene</div>
+							<div className="u-text-right">{score.known}/{score.unused} </div>
+							<div>Napacne besede</div>
+							<div className="u-text-right">{score.miss}</div>
+							<div>Ponovljene besede</div>
+							<div className="u-text-right">{score.repeat} </div>
+						</div>
+						{ renderHistory() }
+					</div>
+				</div>
+			)
+		}
 
     return (
         <>
-            <div>
-                <div className="c-word">
-                    { value &&
-                        <div className="c-word__container">
-                            {Array.from(value).map((l,i) => (
-                                <span key={i}>{l}</span>
-                            ))}
-                        </div>
+					<div className="c-word">
+							{ value &&
+									<div className="c-word__container">
+											{Array.from(value).map((l,i) => (
+													<span key={i}>{l}</span>
+											))}
+									</div>
 
-                    }
-                </div>
-                <React.Fragment key={JSON.stringify(letters)}>
-                <PatternSelect
-                    letters={letters}
-                    onClear={handleClear}
-                    setValue={setValue}
-                    onSubmit={handleSubmit}
-                />
-                </React.Fragment>
-
-              <span class="elapsed">{Math.floor(elapsed/60)}:{elapsed%60}</span>
-            </div>
-          <Actions renderHistory={renderHistory}
-                   onShuffle={handleShuffle}
-                   onReload={onReload} />
+							}
+					</div>
+					<div className="c-selection">
+						<React.Fragment key={JSON.stringify(letters)}>
+							<div className="c-selection__side c-selection__side--left">
+								<button
+									className="c-btn c-btn--round"
+									onClick={ (e) => handleRenderList() }>
+									{ iconList() }
+								</button>
+							</div>
+							<div className="c-selection__side c-selection__side--right">
+								<button
+									className="c-btn c-btn--round"
+									onClick={(e) => handleShuffle()}
+									title="Shuffle">
+									{ iconShuffle() }
+								</button>
+							</div>
+							
+							<PatternSelect
+								letters={letters}
+								onClear={handleClear}
+								setValue={setValue}
+								onSubmit={handleSubmit}
+							/>
+						</React.Fragment>
+					</div>
+	
+					{ showScoreList && renderScore() }
+        
         </>
     );
 };

@@ -1,0 +1,15 @@
+.c-selection {
+  position: relative;
+
+  &__side {
+    position: absolute;
+    top: 0;
+
+    &--left {
+      left: 5vmin;
+    }
+    &--right {
+      right: 5vmin;
+    }
+  }
+}

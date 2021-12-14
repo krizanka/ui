@@ -1,32 +1,32 @@
 import React from "react";
-import {iconBlack} from "./Svg"
 
 const Pad = ({pad, rows, cols, hintLimit, onHint, guesses, score}) => {
     function renderCell(x,y) {
+				const className = "c-table__cell"
         let p = pad[[x,y]];
         let k = x;
         let l;
         let opt = {};
         if (p === undefined) {
-            opt.className="cell black";
-            l = iconBlack();
+            opt.className=`${className} ${className}--null`;
+            l = " ";
         } else if (p.guess === null && (p.hint || 0) < hintLimit) {
-            opt.className="cell empty";
+            opt.className=`${className} ${className}--empty`;
             opt.onClick = e => onHint(x,y);
             l=" ";
         } else if (p.guess === null && (p.hint || 0) >= hintLimit) {
-            opt.className="cell";
+            opt.className=`${className}`;
             l=p.l;
         } else if (p.guess < guesses.length) {
-            opt.className="cell solved";
+            opt.className=`${className} ${className}--solved`;
             l=p.l;
         } else {
-            opt.className="cell solved guessed";
+            opt.className=`${className} ${className}--solved ${className}--guessed`;
             l=p.l;
         }
 
         if (p && p.hint && p.hint >= hintLimit) {
-            opt.className += " hint";
+            opt.className += ` ${className}--hint`;
         }
 
         return (
@@ -38,33 +38,22 @@ const Pad = ({pad, rows, cols, hintLimit, onHint, guesses, score}) => {
 
     function renderRow(y) {
         return (
-            <div className="row" key={y}>
+            <div className="c-table__row" key={y}>
                 {cols.map(x => renderCell(x,y))}
             </div>
         );
     }
 
     function renderPad() {
-    	// todo converted from table
         return (
-            <>
-              <div className="grid">
-				        {rows.map(y => renderRow(y))}
-              </div>
-              <div className="score">
-                <span className="guess"> g {score.guess}/{score.words} </span>
-                <span className="known"> k {score.known}/{score.unused} </span>
-                <span className="miss"> m {score.miss} </span>
-                <span className="repeat"> r {score.repeat} </span>
-              </div>
-            </>
+					<div className="c-table">
+						{rows.map(y => renderRow(y))}
+					</div>
         );
     }
 
     return (
-        <>
-            {renderPad()}
-        </>
+			renderPad()
     );
 };
 

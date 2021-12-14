@@ -1,52 +1,49 @@
-.grid {
+.c-table {
   display: flex;
   flex-direction: column;
-  margin: 14px;
+  margin: 0 16px;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__cell {
+    width: 6vmin;
+    height: 6vmin;
+    margin: 1px;
+    font-size: 6vmin;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    border-radius: var(--border-radius);
+
+    &--null {
+      background-color: var(--c-cell-null);
+    }
+
+    &--empty {
+      background-color: var(--c-cell-empty);
+    }
+
+    &--solved {
+      background-color: var(--c-cell-solved);
+      color: var(--c-primary);
+    }
+
+    &--guessed {
+      background-color: var(--c-cell-guessed);
+      color: var(--c-primary);
+    }
+
+    &--hint {
+      background-color: var(--c-cell-hint);
+      color: var(--c-primary);
+    }
+  }
+
 }
 
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cell {
-  width: 6vmin;
-  height: 6vmin;
-  margin: 1px;
-  font-size: 6vmin;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  border-radius: 2px;
-
-
-  &.empty {
-    background-color: var(--c-secondary);
-  }
-
-  &.solved {
-    background-color: var(--c-accent);
-    color: var(--c-primary);
-  }
-
-  &.guessed {
-      background-color: var(--c-tertiary);
-      color: var(--c-primary);
-  }
-
-  &.hint {
-      background-color: var(--c-accent2);
-      color: var(--c-primary);
-  }
-  &.black {
-      background-color: var(--c-secondary);
-      color: var(--c-primary);
-      svg {
-          width: 5vmin;
-          height: 5vmin;
-      }
-  }
-}
