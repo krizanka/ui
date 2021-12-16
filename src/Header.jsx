@@ -18,7 +18,7 @@ const Header = ({elapsed, score, onReload}) => {
 		<header className={ headerClass }>
 			<div className={`${headerItemClass} ${headerItemClass}--left`}>
 				{ iconTime() }
-				{Math.floor(elapsed / 60)}:{elapsed % 60}
+				{Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2,'0')}
 			</div>
 			<div className={`${headerItemClass} ${headerItemClass}--center`}>
 				{score.guess}/{score.words}

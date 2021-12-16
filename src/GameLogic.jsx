@@ -52,9 +52,13 @@ const schema_migrations = {
     1: (state) => ({...state,
                     schema: 2,
                     gameplay: {previous: 0, start: Date.now(), current: 0}}),
+    2: (state) => ({...state,
+                    schema: 3,
+                    gameplay: {...state.gameplay, finished: checkFinished(state.pad)},
+                    theme: "theme-dark"}),
 };
 
-const state_schema_version = 2;
+const state_schema_version = 3;
 
 function validate_schema_migrations() {
     for (const i of range(state_schema_version)) {
@@ -71,6 +75,10 @@ function validate_schema_migrations() {
     return true;
 }
 
+function checkFinished(pad) {
+    return Object.values(pad).every(x => x.guess !== null);
+}
+
 function stateFromCrossword(crossword) {
     const words = new Set(crossword.words.map((w)=>w.w));
     return {
@@ -85,8 +93,8 @@ function stateFromCrossword(crossword) {
         rows: range(crossword.size[1]),
         crossword: crossword,
         letters: Array.from(crossword.letters).slice().sort(),
-        gameplay: {previous: 0, start: Date.now(), current: 0},
-				theme: '',
+        gameplay: {previous: 0, start: Date.now(), current: 0, finished: false},
+        theme: "theme-dark",
         // see above for state schema changes
     };
 }
@@ -125,7 +133,7 @@ function saveState(state) {
     state = {...state,
              gameplay: {
                  previous: state.gameplay.previous + state.gameplay.current,
-                 current: 0
+                 current: 0,
              }};
     const ser = JSON.stringify(state);
     store.setItem(STATE_KEY, ser);
@@ -134,12 +142,24 @@ function saveState(state) {
 class GameLogic extends React.Component {
     constructor(props) {
         super(props);
-        this.state = restoreState() || stateFromCrossword(getCrossword());
-        setInterval(() => this.handleTick(), 1000);
+        this.state = this.startTick(restoreState() || stateFromCrossword(getCrossword()));
+    }
+
+    startTick(state) {
+        if (state._tick) {
+            clearInterval(state._tick);
+        }
+        return {...state,
+                _tick: setInterval(() => this.handleTick(), 1000)};
     }
 
     handleTick() {
         const state = this.state;
+        if (state.gameplay.finished) {
+            clearInterval(state._timer);
+            this.setState({...state, _timer: null});
+            return;
+        }
         const elapsed = Math.floor((Date.now() - state.gameplay.start) / 1000);
         if (elapsed !== state.gameplay.current) {
             this.setState({
@@ -154,15 +174,17 @@ class GameLogic extends React.Component {
 
     handleReload() {
         const state = stateFromCrossword(getCrossword());
+        // restore theme
+        // FIXME: move preferences to App state
+        state.theme = this.state.theme;
         saveState(state);
-        this.setState(state);
+        this.setState(this.startTick(state));
     }
 
 
     handleGuess(w) {
         const is_w = x => x.w === w;
         const fnot = f => ((...args) => !f(...args));
-
         let history_entry;
         let history = this.state.history;
         let guesses = this.state.guesses;
@@ -211,7 +233,8 @@ class GameLogic extends React.Component {
             history: history,
             pad: pad,
             guesses: guesses,
-            score: {...score, ...score_update}
+            score: {...score, ...score_update},
+            gameplay: {...this.state.gameplay, finished: checkFinished(pad)}
         };
         saveState(newState);
         this.setState(newState);
@@ -227,10 +250,14 @@ class GameLogic extends React.Component {
                     hint:cell.l,
                     w: w
                    }].concat(history);
-        pad[[x,y]] = {
+        cell = {
             ...cell,
             hint: 1 + (cell.hint || 0)
         };
+        if (cell.hint >= this.props.hintLimit) {
+            cell.guess = 0;
+        }
+        pad[[x,y]] = cell;
         this.setState({
             ...this.state,
             history: history,
@@ -255,7 +282,7 @@ class GameLogic extends React.Component {
                 onHint={(x,y) => this.handleHint(x,y)}
                 onGuess={(w) => this.handleGuess(w)}
                 onReload={() => this.handleReload()}
-								theme={ "theme-dark" }
+                theme={state.theme}
 						    />
         );
     }
