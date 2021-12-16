@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import PatternSelect from './PatternSelect';
 import {iconList, iconShuffle, iconClose} from "./Svg";
 
@@ -20,7 +20,7 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, scor
     const [value, setValue] = useState("");
 		const [showScoreList, setShowScoreList] = useState(false);
 
-    React.useEffect(()=>setLetters(lettersToState(propsLetters)), [propsLetters])
+    useEffect(()=>setLetters(lettersToState(propsLetters)), [propsLetters])
 
     function handleSubmit(val) {
         if (val.length < 3)
@@ -86,7 +86,6 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, scor
 							}
 					</div>
 					<div className="c-selection">
-						<React.Fragment key={JSON.stringify(letters)}>
 							<div className="c-selection__side c-selection__side--left">
 								<button
 									className="c-btn c-btn--round"
@@ -102,18 +101,16 @@ const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, scor
 									{ iconShuffle() }
 								</button>
 							</div>
-							
-							<PatternSelect
-								letters={letters}
-								onClear={handleClear}
-								setValue={setValue}
-								onSubmit={handleSubmit}
-							/>
-						</React.Fragment>
+              <React.Fragment key={JSON.stringify(letters)}>
+                <PatternSelect
+                  letters={letters}
+                  onClear={handleClear}
+                  setValue={setValue}
+                  onSubmit={handleSubmit}
+                />
+              </React.Fragment>
 					</div>
-	
 					{ showScoreList && renderScore() }
-        
         </>
     );
 };

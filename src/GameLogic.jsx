@@ -141,7 +141,7 @@ class GameLogic extends React.Component {
     handleTick() {
         const state = this.state;
         const elapsed = Math.floor((Date.now() - state.gameplay.start) / 1000);
-        if (elapsed > state.gameplay.current) {
+        if (elapsed !== state.gameplay.current) {
             this.setState({
                 ...state,
                 gameplay: {
