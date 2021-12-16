@@ -71,6 +71,19 @@ function validate_schema_migrations() {
     return true;
 }
 
+function checkFinished(guesses, words){
+    let finished = true
+    words.forEach(x=> {
+        const index = guesses.indexOf(x.w)
+        if (index === -1){
+            finished = false
+            return finished
+
+        }
+    })
+    return finished
+} 
+
 function stateFromCrossword(crossword) {
     const words = new Set(crossword.words.map((w)=>w.w));
     return {
@@ -85,7 +98,7 @@ function stateFromCrossword(crossword) {
         rows: range(crossword.size[1]),
         crossword: crossword,
         letters: Array.from(crossword.letters).slice().sort(),
-        gameplay: {previous: 0, start: Date.now(), current: 0},
+        gameplay: {previous: 0, start: Date.now(), current: 0, finished: checkFinished([], crossword.words)},
         // see above for state schema changes
     };
 }
@@ -112,6 +125,7 @@ function restoreState() {
             gameplay: {
                 ...state.gameplay,
                 current: 0,
+                finished: checkFinished(state.guesses, state.crossword.words),
                 start: Date.now()}};
     return state;
 }
@@ -124,7 +138,8 @@ function saveState(state) {
     state = {...state,
              gameplay: {
                  previous: state.gameplay.previous + state.gameplay.current,
-                 current: 0
+                 current: 0,
+                 finished: checkFinished(state.guesses, state.crossword.words)
              }};
     const ser = JSON.stringify(state);
     store.setItem(STATE_KEY, ser);
@@ -139,15 +154,17 @@ class GameLogic extends React.Component {
 
     handleTick() {
         const state = this.state;
+        if (!state.gameplay.finished){
         const elapsed = Math.floor((Date.now() - state.gameplay.start) / 1000);
-        if (elapsed !== state.gameplay.current) {
-            this.setState({
-                ...state,
-                gameplay: {
-                    ...state.gameplay,
-                    current: elapsed
-                }
-            });
+            if (elapsed !== state.gameplay.current) {
+                this.setState({
+                    ...state,
+                    gameplay: {
+                        ...state.gameplay,
+                        current: elapsed
+                    }
+                });
+            }
         }
     }
 
@@ -161,7 +178,6 @@ class GameLogic extends React.Component {
     handleGuess(w) {
         const is_w = x => x.w === w;
         const fnot = f => ((...args) => !f(...args));
-
         let history_entry;
         let history = this.state.history;
         let guesses = this.state.guesses;
@@ -210,7 +226,8 @@ class GameLogic extends React.Component {
             history: history,
             pad: pad,
             guesses: guesses,
-            score: {...score, ...score_update}
+            score: {...score, ...score_update},
+            gameplay: {...this.state.gameplay, finished: checkFinished(guesses, this.state.crossword.words)}
         };
         saveState(newState);
         this.setState(newState);

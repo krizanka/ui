@@ -227,7 +227,6 @@ const PatternSelect = ({letters, onClear, setValue, onSubmit}) => {
         
     <div style={{display: "flex", justifyContent:"center", padding: 20}}>
         <svg style={{width: 250, height: 250, background: "var(--c-secondary)", borderRadius: "50%"}} className="patternlock" id="lock" viewBox="0 0 125 125" xmlns="http://www.w3.org/2000/svg">
-            {/* <g><circle  cx={62.5} cy={62.5} r={50} opacity="1" /></g> */}
                 <g className="lock-actives"></g>
                 <g className="lock-lines"></g>
                 <g className="lock-dots">
