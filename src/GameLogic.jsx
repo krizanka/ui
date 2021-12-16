@@ -149,8 +149,10 @@ class GameLogic extends React.Component {
         if (state._tick) {
             clearInterval(state._tick);
         }
-        return {...state,
-                _tick: setInterval(() => this.handleTick(), 1000)};
+        return {
+            ...state,
+            _tick: setInterval(() => this.handleTick(), 1000),
+        };
     }
 
     handleTick() {
@@ -173,12 +175,12 @@ class GameLogic extends React.Component {
     }
 
     handleReload() {
-        const state = stateFromCrossword(getCrossword());
+        const state = this.startTick(stateFromCrossword(getCrossword()));
         // restore theme
         // FIXME: move preferences to App state
         state.theme = this.state.theme;
         saveState(state);
-        this.setState(this.startTick(state));
+        this.setState(state);
     }
 
 
@@ -261,7 +263,8 @@ class GameLogic extends React.Component {
         this.setState({
             ...this.state,
             history: history,
-            pad: pad
+            pad: pad,
+            gameplay: {...this.state.gameplay, finished: checkFinished(pad)}
         });
     }
 

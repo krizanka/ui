@@ -1,4 +1,12 @@
 export function getCrossword() {
+    if (window.location.hash === "#debug") {
+        console.log("Returning fake crossword");
+        return {size: [3, 3],
+                words: [{d:"Across", w: "ABC", s: [0,0]},
+                        {d:"Down", w: "CDE", s: [2,0]}],
+                letters: "ABCDE",
+                unused:["BAC", "DEC", "ACE"]};
+    }
     const crosswords = [
 
 {"size": [8, 6], "words": [{"d": "Across", "w": "POST", "s": [4, 0]}, {"d": "Across", "w": "TRPNOST", "s": [0, 1]}, {"d": "Across", "w": "STOP", "s": [4, 2]}, {"d": "Across", "w": "OPRT", "s": [0, 3]}, {"d": "Across", "w": "SPOT", "s": [4, 4]}, {"d": "Across", "w": "ROP", "s": [1, 5]}, {"d": "Down", "w": "TRON", "s": [0, 1]}, {"d": "Down", "w": "SPOR", "s": [2, 0]}, {"d": "Down", "w": "POS", "s": [4, 0]}, {"d": "Down", "w": "OST", "s": [5, 0]}, {"d": "Down", "w": "STO", "s": [6, 0]}, {"d": "Down", "w": "PTT", "s": [7, 2]}], "letters": "TRPNOST", "unused": ["NOR", "NOS", "NOT", "ORT", "OST", "POR", "POS", "POT", "PRO", "PRT", "PST", "PTT", "ROP", "SON", "SOR", "SRN", "SRP", "SRT", "STO", "TON", "TOP", "TOR", "TRN", "TRP", "TRS", "OPRT", "PONT", "PORT", "POST", "PROT", "PRST", "SNOP", "SPON", "SPOR", "SPOT", "STON", "STOP", "STOT", "STRN", "TRON", "TROP", "TROT", "TRST", "PROST", "STROP"]},
