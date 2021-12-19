@@ -38,6 +38,7 @@ class Game extends React.Component {
 							style={{display: "flex", flexDirection:"column", justifyContent:"space-between", height: "100vh"}}
 							className={`${this.props.theme} game`}>
 							<Header
+                level={this.props.level}
 								elapsed={this.props.elapsed}
 								score={this.props.score}
 								onReload={this.props.onReload}

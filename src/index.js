@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import './styles/main.scss';
@@ -11,12 +11,15 @@ ReactGA.initialize(TRACKING_ID);
 ReactGA.pageview(window.location.pathname + window.location.search);
 
 
-class App extends React.Component {
-    render() {
-        return (
-					<GameLogic hintLimit={5} />
+function App() {
+    // level: easy, medium, advanced, expert
+    const [level, setLevel] = useState("easy");
+
+    return (
+				<GameLogic level={level}
+                   onLevel={(l)=>setLevel(l)}
+                   hintLimit={5} />
         );
-    }
 }
 
 // ========================================

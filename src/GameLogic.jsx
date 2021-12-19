@@ -56,9 +56,12 @@ const schema_migrations = {
                     schema: 3,
                     gameplay: {...state.gameplay, finished: checkFinished(state.pad)},
                     theme: "theme-dark"}),
+    3: (state) => ({...state,
+                    schema: 4,
+                    level: "expert"})
 };
 
-const state_schema_version = 3;
+const state_schema_version = 4;
 
 function validate_schema_migrations() {
     for (const i of range(state_schema_version)) {
@@ -79,7 +82,8 @@ function checkFinished(pad) {
     return Object.values(pad).every(x => x.guess !== null);
 }
 
-function stateFromCrossword(crossword) {
+function stateFromCrossword(level) {
+    const crossword = getCrossword(level);
     const words = new Set(crossword.words.map((w)=>w.w));
     return {
         // Bump state_schema above when you muck with state.
@@ -95,18 +99,19 @@ function stateFromCrossword(crossword) {
         letters: Array.from(crossword.letters).slice().sort(),
         gameplay: {previous: 0, start: Date.now(), current: 0, finished: false},
         theme: "theme-dark",
+        level: level,
         // see above for state schema changes
     };
 }
 
-const STATE_KEY = 'game.state';
+function state_key(level) { return 'game.state.' + level; }
 
-function restoreState() {
+function restoreState(level) {
     const store = window.localStorage;
     if (!store) {
         return undefined;
     }
-    const ser = store.getItem(STATE_KEY);
+    const ser = store.getItem(state_key(level));
     if (!ser) {
         return undefined;
     }
@@ -115,7 +120,12 @@ function restoreState() {
     }
     let state = JSON.parse(ser);
     while (state && state.schema < state_schema_version) {
+        const old_schema = state.schema;
         state = schema_migrations[state.schema](state);
+        if (old_schema === state.schema) {
+            alert("Schema migration did not upgrade schema?");
+            return undefined;
+        }
     }
     state = {...state,
             gameplay: {
@@ -136,13 +146,14 @@ function saveState(state) {
                  current: 0,
              }};
     const ser = JSON.stringify(state);
-    store.setItem(STATE_KEY, ser);
+    store.setItem(state_key(state.level), ser);
 }
 
 class GameLogic extends React.Component {
     constructor(props) {
         super(props);
-        this.state = this.startTick(restoreState() || stateFromCrossword(getCrossword()));
+        this.state = this.startTick(restoreState(this.props.level) ||
+                                    stateFromCrossword(this.props.level));
     }
 
     startTick(state) {
@@ -174,8 +185,9 @@ class GameLogic extends React.Component {
         }
     }
 
-    handleReload() {
-        const state = this.startTick(stateFromCrossword(getCrossword()));
+    handleReload(level) {
+        this.props.onLevel(level);
+        const state = this.startTick(stateFromCrossword(level));
         // restore theme
         // FIXME: move preferences to App state
         state.theme = this.state.theme;
@@ -284,8 +296,9 @@ class GameLogic extends React.Component {
                 elapsed={state.gameplay.previous + state.gameplay.current}
                 onHint={(x,y) => this.handleHint(x,y)}
                 onGuess={(w) => this.handleGuess(w)}
-                onReload={() => this.handleReload()}
+                onReload={(level) => this.handleReload(level)}
                 theme={state.theme}
+                level={this.state.level}
 						    />
         );
     }

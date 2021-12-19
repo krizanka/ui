@@ -1,15 +1,28 @@
 import React, { useState } from "react";
 import { iconTime, iconSettings } from "./Svg";
 
-const Header = ({elapsed, score, onReload}) => {
+const levels = {easy:"lahka",
+               medium:"srednja",
+               advanced:"tezka",
+               expert:"zelo tezka"}
+const Header = ({level, elapsed, score, onReload}) => {
 	const [toggle, setToggle] = useState(false);
 	const toggleHandler = () => setToggle(!toggle);
 	
-	const modalWindow = <div>
-		<button onClick={(e) => onReload()} title="Reload">
-			Nova igra
-		</button>
-	</div>
+	  const modalWindow = (
+        <div>
+          {Object.keys(levels).map((level) => {
+		          return (
+                  <>
+                    <button onClick={(e) => onReload(level)} title="Reload">
+			                Nova {levels[level]} igra
+		                </button>
+                    <br/>
+                  </>
+              );
+          })}
+	      </div>
+    );
 	
 	const headerClass = "c-header"
 	const headerItemClass = `${headerClass}__item`
@@ -22,6 +35,8 @@ const Header = ({elapsed, score, onReload}) => {
 			</div>
 			<div className={`${headerItemClass} ${headerItemClass}--center`}>
 				{score.guess}/{score.words}
+        &nbsp;
+        ({levels[level]})
 			</div>
 			<div className={`${headerItemClass} ${headerItemClass}--right`}>
 				<button className="c-btn"	onClick={ toggleHandler } >
