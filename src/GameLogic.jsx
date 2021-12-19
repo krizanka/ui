@@ -1,6 +1,7 @@
 import React from "react";
 import { getCrossword } from './static.js';
 import Game from "./Game"
+import { logGuess } from "./Analytics"
 
 const directions = {
     Down: start => (i => [start[0], start[1] + i]),
@@ -205,6 +206,7 @@ class GameLogic extends React.Component {
         let pad = this.state.pad;
         const score = this.state.score;
         let score_update = {};
+        logGuess(w)
         const hits = this.state.crossword.words.filter(is_w);
         if (hits.length > 0) {
             pad = {...this.state.pad};

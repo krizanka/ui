@@ -41,6 +41,8 @@ jobs:
       run: echo "${{ steps.fixup.outputs.destination }}"
 
     - name: Build project
+      env:
+        REACT_APP_TRACKING_ID: G-ZEPK0MGHLE
       run: npm run build
 
     - name: Deploy project to gh-pages
