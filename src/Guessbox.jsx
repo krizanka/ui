@@ -15,7 +15,7 @@ function lettersToState(letters) {
     return letters.map((x) => ({l: x, used: false}));
 }
 
-const Guessbox = ({propsLetters, onGuess, onReload, renderHistory, elapsed, score}) => {
+const Guessbox = ({propsLetters, onGuess, renderHistory, elapsed, score}) => {
     const [letters, setLetters] = useState(lettersToState(propsLetters));
     const [value, setValue] = useState("");
 		const [showScoreList, setShowScoreList] = useState(false);

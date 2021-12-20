@@ -38,10 +38,12 @@ class Game extends React.Component {
 							style={{display: "flex", flexDirection:"column", justifyContent:"space-between", height: "100vh"}}
 							className={`${this.props.theme} game`}>
 							<Header
+                theme={this.props.theme}
                 level={this.props.level}
 								elapsed={this.props.elapsed}
 								score={this.props.score}
 								onReload={this.props.onReload}
+                onTheme={this.props.onTheme}
 							/>
               <Pad
                 pad={this.props.pad}
@@ -54,7 +56,6 @@ class Game extends React.Component {
               <Guessbox
                 propsLetters={this.props.letters}
                 onGuess={this.props.onGuess}
-                onReload={this.props.onReload}
                 renderHistory={() => this.renderHistory()}
                 elapsed={this.props.elapsed}
 								score={this.props.score}

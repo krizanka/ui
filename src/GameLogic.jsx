@@ -99,7 +99,6 @@ function stateFromCrossword(level) {
         crossword: crossword,
         letters: Array.from(crossword.letters).slice().sort(),
         gameplay: {previous: 0, start: Date.now(), current: 0, finished: false},
-        theme: "theme-dark",
         level: level,
         // see above for state schema changes
     };
@@ -189,9 +188,6 @@ class GameLogic extends React.Component {
     handleReload(level) {
         this.props.onLevel(level);
         const state = this.startTick(stateFromCrossword(level));
-        // restore theme
-        // FIXME: move preferences to App state
-        state.theme = this.state.theme;
         saveState(state);
         this.setState(state);
     }
@@ -299,7 +295,8 @@ class GameLogic extends React.Component {
                 onHint={(x,y) => this.handleHint(x,y)}
                 onGuess={(w) => this.handleGuess(w)}
                 onReload={(level) => this.handleReload(level)}
-                theme={state.theme}
+                theme={this.props.theme}
+                onTheme={this.props.onTheme}
                 level={this.state.level}
 						    />
         );

@@ -10,12 +10,26 @@ import { init } from './Analytics'
 init()
 
 function App() {
+    const levelKey = 'level';
     // level: easy, medium, advanced, expert
-    const [level, setLevel] = useState("easy");
+    const [level, setLevel] = useState(localStorage.getItem(levelKey) || 'easy');
+    React.useEffect(() => {
+        localStorage.setItem(levelKey, level);
+    }, [level]);
+
+    // theme: theme-dark, ...
+    const themeKey = 'theme';
+    const [theme, setTheme] = useState(localStorage.getItem(themeKey) || 'theme-dark');
+    React.useEffect(() => {
+        localStorage.setItem(themeKey, theme);
+    }, [theme]);
+
 
     return (
-				<GameLogic level={level}
+        <GameLogic level={level}
                    onLevel={(l)=>setLevel(l)}
+                   theme={theme}
+                   onTheme={(t)=>{alert("set theme "+t);setTheme(t)}}
                    hintLimit={5} />
         );
 }
