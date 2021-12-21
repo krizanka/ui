@@ -29,7 +29,7 @@ function App() {
         <GameLogic level={level}
                    onLevel={(l)=>setLevel(l)}
                    theme={theme}
-                   onTheme={(t)=>{alert("set theme "+t);setTheme(t)}}
+                   onTheme={(t)=>{setTheme(t);}}
                    hintLimit={5} />
         );
 }

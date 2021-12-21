@@ -21,6 +21,9 @@
   --c-cell-guessed: var(--c-accent);
   --c-cell-hint: var(--c-accent);
 
+  --c-pattern-background: var(--c-secondary);
+  --c-pattern-letter: var(--c-tertiary);
+
   --border-radius: 2px;
 
 }
@@ -60,6 +63,9 @@
   --c-cell-solved: var(--c-accent);
   --c-cell-guessed: var(--c-accent);
   --c-cell-hint: var(--c-accent);
+
+  --c-pattern-background: var(--c-primary);
+  --c-pattern-letter: var(--c-black-100);
 
   --border-radius: 0;
 }

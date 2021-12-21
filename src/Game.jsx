@@ -59,6 +59,7 @@ class Game extends React.Component {
                 renderHistory={() => this.renderHistory()}
                 elapsed={this.props.elapsed}
 								score={this.props.score}
+                theme={this.props.theme}
 							/>
             </div>
         );

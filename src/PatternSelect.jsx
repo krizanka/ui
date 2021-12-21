@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from "react"
 import $ from "jquery"
 
-const PatternSelect = ({letters, onClear, setValue, onSubmit}) => {
+const PatternSelect = ({letters, onClear, setValue, onSubmit, theme}) => {
     const moveEvent = 'touchstart mousedown touchmove mousemove'
     const svgns = 'http://www.w3.org/2000/svg'
   
@@ -225,15 +225,15 @@ const PatternSelect = ({letters, onClear, setValue, onSubmit}) => {
 
     return (
         
-    <div style={{display: "flex", justifyContent:"center", padding: 20}}>
-        <svg style={{width: 250, height: 250, background: "var(--c-secondary)", borderRadius: "50%"}} className="patternlock" id="lock" viewBox="0 0 125 125" xmlns="http://www.w3.org/2000/svg">
+        <div key={theme} style={{display: "flex", justifyContent:"center", padding: 20}}>
+        <svg style={{width: 250, height: 250, background: "var(--c-pattern-background)", borderRadius: "50%"}} className="patternlock" id="lock" viewBox="0 0 125 125" xmlns="http://www.w3.org/2000/svg">
                 <g className="lock-actives"></g>
                 <g className="lock-lines"></g>
                 <g className="lock-dots">
                     {letters && letters.length && letters.map((l,i) => {
                         return(
                             <React.Fragment key={i}>
-                                <text className="svgtxt" value={l.l} id={`letter_${i}`} textAnchor="middle" x={getCoordinates(i).x} y={getCoordinates(i).y} fill="var(--c-tertiary)" fontSize="0.8em"  dy=".3em">{l.l.toUpperCase()}</text>
+                                <text className="svgtxt" value={l.l} id={`letter_${i}`} textAnchor="middle" x={getCoordinates(i).x} y={getCoordinates(i).y} fill="var(--c-pattern-letter)" fontSize="0.8em"  dy=".3em">{l.l.toUpperCase()}</text>
                                 <circle index={i} data={l.l}  id={i} cx={getCircleCoordinates(i).x} cy={getCircleCoordinates(i).y} x={getCoordinates(i).x} y={getCoordinates(i).y} r={12} fill="#0000FF" opacity="0" />
                             </React.Fragment>
                         )}

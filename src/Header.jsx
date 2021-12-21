@@ -42,8 +42,8 @@ const Header = ({theme, level, elapsed, score, onReload, onTheme}) => {
                   {["theme-dark", "theme-light"].map((new_theme) => {
                       return (
                           <li key={new_theme}>
-                            <button className={`${new_theme} c-table__cell--solved`}
-                                    onClick={(e) => {alert(theme + " klik "+new_theme );onTheme(new_theme);}}
+                            <button className={` c-table__cell--solved ${new_theme}`}
+                                    onClick={(e) => {onTheme(new_theme);}}
                                     title="Reload">
                               {new_theme === theme ? 'X' : 'O'} &nbsp;
                               {themes[new_theme]}
